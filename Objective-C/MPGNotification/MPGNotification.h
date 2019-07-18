@@ -132,6 +132,8 @@ typedef void (^MPGNotificationDismissHandler)(MPGNotification *notification);
 // Dismiss the notification. Occurs automatically if any enabled button is pressed.
 - (void)dismissWithAnimation:(BOOL)animated;
 
+-(CGFloat)_getStatusBarHeight;
+
 - (CGFloat)heightForText:(NSString *)bodyText textWidth:(CGFloat) width fontSize:(CGFloat) fontSize;
 
 @end

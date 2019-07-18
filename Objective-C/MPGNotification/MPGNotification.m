@@ -90,7 +90,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
 {
     // If the App has a keyWindow, get it, else get the 'top'-most window in the App's hierarchy.
     UIWindow *window = [self _topAppWindow];
-
+    
     // Now get the 'top'-most object in that window and use its width for the Notification
     UIView *topSubview = [[window subviews] lastObject];
     self.kNotificationHeight = self.kSubtitleHeight + self.kTitleLabelHeight;
@@ -141,7 +141,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
         self.seprator.frame = CGRectMake(self.frame.size.width / 2 - 10, self.frame.size.height - 7, 20, 4);
         [self.seprator.layer setCornerRadius:2];
         self.seprator.layer.masksToBounds = true;
-     //   [self addSubview:self.seprator];
+        //   [self addSubview:self.seprator];
     }
     return self;
 }
@@ -214,10 +214,10 @@ static const CGFloat kColorAdjustmentLight = 0.35;
     self.firstButton.frame = CGRectMake(buttonOriginX, firstButtonOriginY, kButtonWidthDefault, buttonHeight);
     self.secondButton.frame = CGRectMake(buttonOriginX, secondButtonOriginY, kButtonWidthDefault, buttonHeight);
     self.closeButton.frame = CGRectMake(closeButtonOriginX, kCloseButtonOriginY, kCloseButtonWidth, kCloseButtonHeight);
-
+    
     // TITLE LABEL
     NSParameterAssert(self.title);
-
+    
     CGFloat textPaddingX = (self.iconImage) ? CGRectGetMaxX(self.iconImageView.frame) + kPaddingX : contentPaddingX + kPaddingX + 5;
     CGFloat textTrailingX = (self.firstButton) ? CGRectGetWidth(self.bounds) - CGRectGetMinX(self.firstButton.frame) + 9 : contentPaddingX + 20;
     CGFloat textWidth = notificationWidth - (textPaddingX + textTrailingX);
@@ -255,9 +255,9 @@ static const CGFloat kColorAdjustmentLight = 0.35;
     // SUBTITLE LABEL
     CGFloat subtitlePaddingY = 8;
     self.subtitleLabel.frame = CGRectMake(CGRectGetMinX(self.titleLabel.frame),
-                                              titleEmpty ? 5 : (CGRectGetMaxY(self.titleLabel.frame) - subtitlePaddingY),
-                                              textWidth,
-                                              self.kSubtitleHeight);
+                                          titleEmpty ? [self _getStatusBarHeight]+5 : (CGRectGetMaxY(self.titleLabel.frame) - subtitlePaddingY),
+                                          textWidth,
+                                          self.kSubtitleHeight);
     
     [self.subtitleLabel setNumberOfLines:3];
     [self.titleLabel setNumberOfLines: 0];
@@ -270,7 +270,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
         static const CGFloat kSwipeHintWidth = 37;
         static const CGFloat kSwipeHintHeight = 5;
         static const CGFloat kSwipeHintTrailingY = 5;
-
+        
         self.swipeHintView.frame = CGRectMake(0.5 * (CGRectGetWidth(self.backgroundView.bounds) - kSwipeHintWidth),
                                               CGRectGetHeight(self.backgroundView.bounds) - kSwipeHintTrailingY - kSwipeHintHeight,
                                               kSwipeHintWidth,
@@ -278,7 +278,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
         
         self.swipeHintView.layer.cornerRadius = CGRectGetHeight(self.swipeHintView.bounds) * 0.5;
     }
-
+    
     // COLORS!!
     self.swipeHintView.backgroundColor = [UIColor colorWithRed:59.0/255.0 green:198.0/255.0 blue:244.0/255.0 alpha:1];
     self.titleLabel.textColor = self.titleColor;
@@ -370,12 +370,12 @@ static const CGFloat kColorAdjustmentLight = 0.35;
     _title = title;
     
     if (!self.titleLabel) {
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(1, 10, 1, 1)];
         [self.backgroundView addSubview:self.titleLabel];
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.font = [UIFont fontWithName:kTitleFontName size:kTitleFontSize];
     }
-
+    
     self.titleLabel.text = title;
     [self setNeedsLayout];
 }
@@ -390,7 +390,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
         self.subtitleLabel.backgroundColor = [UIColor clearColor];
         self.subtitleLabel.font = [UIFont fontWithName:kSubtitleFontName size:kSubtitleFontSize];
     }
-
+    
     self.subtitleLabel.text = subtitle;
     [self setNeedsLayout];
 }
@@ -441,14 +441,14 @@ static const CGFloat kColorAdjustmentLight = 0.35;
         [self.backgroundView addGestureRecognizer:tapRecognizer];
     }
     else{
-//        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_swipeUp:)];
-//        swipeRecognizer.direction = UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown;
-//        self.seprator.userInteractionEnabled = true;
-//        self.backgroundView.userInteractionEnabled = true;
-//        swipeRecognizer.delegate = self;
-//        
-//        [self.backgroundView addGestureRecognizer:swipeRecognizer];
-//        [self.seprator addGestureRecognizer:swipeRecognizer];
+        //        UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_swipeUp:)];
+        //        swipeRecognizer.direction = UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown;
+        //        self.seprator.userInteractionEnabled = true;
+        //        self.backgroundView.userInteractionEnabled = true;
+        //        swipeRecognizer.delegate = self;
+        //
+        //        [self.backgroundView addGestureRecognizer:swipeRecognizer];
+        //        [self.seprator addGestureRecognizer:swipeRecognizer];
     }
     
 }
@@ -510,13 +510,13 @@ static const CGFloat kColorAdjustmentLight = 0.35;
                 [self.backgroundView addSubview:self.closeButton];
                 
                 self.closeButton.titleLabel.font = [UIFont systemFontOfSize:15.0]; // custom font!
-
+                
             }
             
             break;
         }
             
-        // deliberately grabbing one and two button states
+            // deliberately grabbing one and two button states
         case MPGNotificationButtonConfigrationOneButton:
         case MPGNotificationButtonConfigrationTwoButton: {
             
@@ -550,7 +550,7 @@ static const CGFloat kColorAdjustmentLight = 0.35;
             
             break;
         }
-
+            
     }
     
     [self setNeedsLayout];
@@ -582,8 +582,8 @@ static const CGFloat kColorAdjustmentLight = 0.35;
 - (void)_showNotification {
     
     // Called to display the initiliased notification on screen.
-   
-    self.notificationDestroyed = NO; 
+    
+    self.notificationDestroyed = NO;
     self.notificationRevealed = YES;
     
     [self _setupNotificationViews];
@@ -661,8 +661,8 @@ static const CGFloat kColorAdjustmentLight = 0.35;
     if (animated) {
         
         switch (self.animationType) {
-            
-            // deliberately capturing 2 cases
+                
+                // deliberately capturing 2 cases
             case MPGNotificationAnimationTypeLinear:
             case MPGNotificationAnimationTypeDrop: {
                 
@@ -836,9 +836,16 @@ static const CGFloat kColorAdjustmentLight = 0.35;
     }
     UIView *superview = self.superview;
     self.kNotificationHeight = self.kSubtitleHeight + self.kTitleLabelHeight;
-    self.frame = CGRectMake(0, 0, CGRectGetWidth(superview.bounds), self.kNotificationHeight+10);
+    self.frame = CGRectMake(0, 0, CGRectGetWidth(superview.bounds), self.kNotificationHeight+10 + [self _getStatusBarHeight]);
     self.contentSize = CGSizeMake(CGRectGetWidth(self.bounds), 2 * CGRectGetHeight(self.bounds));
     self.backgroundView.frame = self.bounds;
+}
+
+-(CGFloat)_getStatusBarHeight {
+    UIInterfaceOrientation *interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    BOOL isPortrait = interfaceOrientation == UIInterfaceOrientationPortrait;
+    CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+    return (isPortrait ? statusBarSize.height : statusBarSize.width);
 }
 
 @end
